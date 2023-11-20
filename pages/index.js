@@ -17,7 +17,7 @@ const fontBold = localFont({
 export default function Home() {
   const districts = [
     "Dhaka",
-    "Chittagong",
+    "Chattogram",
     "Sylhet",
     "Rajshahi",
     "Khulna",
@@ -29,7 +29,6 @@ export default function Home() {
     "a Microbus",
     "a Pickup",
     "a Truck",
-    "an Ambulance",
     "a Bus",
     "an CNG",
   ];
@@ -41,7 +40,7 @@ export default function Home() {
     const interval = setInterval(() => {
       setActiveDistrict(Math.floor(Math.random() * districts.length));
       setActiveCarType(Math.floor(Math.random() * carTypes.length));
-    }, 3000);
+    }, 5000);
     return () => clearInterval(interval);
   }, []);
 
