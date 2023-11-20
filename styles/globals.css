@@ -22,6 +22,7 @@ body {
   color: rgb(var(--foreground-rgb));
   background: rgb(var(--background-rgb));
   margin: 15px;
+  color: rgb(98, 98, 98);
 }
 
 
