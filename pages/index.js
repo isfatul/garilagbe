@@ -1,5 +1,6 @@
 import Image from "next/image";
 import logo from "./assets/Garilagbe.png";
+import Link from "next/link";
 
 import buttonStyles from "../styles/buttons.module.css";
 import styles from "../styles/home.module.css";
@@ -56,7 +57,7 @@ export default function Home() {
         />
         <div className={`flex flex-row`}>
           <div className={`${buttonStyles.button1} mr-[10px]`}>Rent a car</div>
-          <div className={`${buttonStyles.button2}`}>Sign In/ Sign Up</div>
+          <Link href="login"><div className={`${buttonStyles.button2}`}>Log In / Sign Up</div></Link>
         </div>
       </div>
       <div className={`flex flex-col min-h-[88vh] justify-center ${styles.bgcover}`}>

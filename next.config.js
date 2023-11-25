@@ -1,6 +1,14 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: true,
-}
 
-module.exports = nextConfig
+module.exports = {
+  reactStrictMode: true,
+  env: {
+    MYSQL_HOST: "sql12.freesqldatabase.com",
+    MYSQL_PORT: "3306",
+    MYSQL_DATABASE: "sql12663468",
+    MYSQL_USER: "sql12663468",
+    MYSQL_PASSWORD: "JANAgh4IBh",
+  },
+};
+
+// module.exports = nextConfig
