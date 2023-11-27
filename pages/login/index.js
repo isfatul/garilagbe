@@ -1,3 +1,7 @@
+"use Client";
+
+import { signIn, signOut, useSession } from "next-auth/react";
+import { useRef, useState } from "react";
 import logo from "../assets/Garilagbe.png";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,6 +17,38 @@ const fontBold = localFont({
 });
 
 export default function Login() {
+  const [error, setError] = useState();
+  const { session, loading } = useSession();
+  console.log(session, loading);
+
+  const emailRef = useRef();
+  const passwordRef = useRef();
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setError();
+    const email = emailRef.current.value;
+    const password = passwordRef.current.value;
+
+    const result = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
+
+    if (result.error) {
+      setError(result.error);
+    } else {
+      window.location.href = "/";
+      // if (!loading && session && session.user.isAdmin === false) {
+      //   window.location.href = "/";
+      // } else {
+      //   alert("You're not supposed to login here.");
+      //   // signOut();
+      // }
+    }
+  }
+
   return (
     <div
       className={`flex min-h-screen sm:flex-row flex-col  text-center items-center justify-center pt-[-10px] ${font.className}`}
@@ -28,19 +64,25 @@ export default function Login() {
           style={{ cursor: "pointer" }}
         />{" "}
       </div>
-      <form>
+      <div>
         <h1 className={`text-4xl ${fontBold.className} text-[#b43737]`}>
           Log In
         </h1>
-        <form className={`flex flex-col`}>
+        {error && <p className="text-red-500">{error}</p>}
+
+        <form onSubmit={handleSubmit} className={`flex flex-col`}>
           <input
-            type="text"
-            placeholder="Username"
+            type="email"
+            placeholder="Email"
+            ref={emailRef}
+            required
             className={`border-2 border-gray-400 rounded-md p-2 mt-2 min-w-[300px]`}
           />
           <input
             type="password"
             placeholder="Password"
+            ref={passwordRef}
+            required
             className={`border-2 border-gray-400 rounded-md p-2 mt-2`}
           />
           <div className={`text-left mt-2`}>
@@ -54,17 +96,21 @@ export default function Login() {
               Remember me
             </label>
           </div>
-          <button className={`${buttonStyles.button1} rounded-md p-2 mt-2`}>
+          <button
+            // onSubmit={handleSubmit}
+            type="submit"
+            className={`${buttonStyles.button1} rounded-md p-2 mt-2`}
+          >
             Log In
           </button>
         </form>
         <div>
           or,{" "}
-          <Link href="signup" className={fontBold.className}>
-            Sign Up
+          <Link href="signup">
+            <span className={fontBold.className}>Sign Up </span>
           </Link>
         </div>
-      </form>
+      </div>
       <div className="absolute top-[10px] right-[10px]">
         Are you an admin?{" "}
         <Link href="/sys-admin/login">

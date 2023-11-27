@@ -1,0 +1,5 @@
+{
+    "audioCues.format": "always",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+}

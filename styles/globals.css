@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-rgb: 255, 255, 255;
@@ -29,4 +28,3 @@ input:focus {
   border: 3px solid #b43737;
   outline: none;
 }
-

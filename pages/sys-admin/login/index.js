@@ -28,7 +28,7 @@ export default function AdminLogin() {
           style={{ cursor: "pointer" }}
         />{" "}
       </div>
-      <form>
+      <div>
         <h1 className={`text-4xl ${fontBold.className} text-[#b43737]`}>
           Admin Log In
         </h1>
@@ -64,7 +64,7 @@ export default function AdminLogin() {
             Sign Up
           </Link>
         </div>
-      </form>
+      </div>
       <div className="absolute top-[10px] right-[10px]">
         Are you an user?{" "}
         <Link href="/login">

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import logo from "./assets/Garilagbe.png";
 import Link from "next/link";
+import { getSession, useSession } from "next-auth/react";
 
 import buttonStyles from "../styles/buttons.module.css";
 import styles from "../styles/home.module.css";
@@ -16,6 +17,15 @@ const fontBold = localFont({
 });
 
 export default function Home() {
+  const { data: session } = useSession();
+  const [sesson, setSession] = useState(null);
+
+  useEffect(() => {
+    getSession().then((session) => {
+      setSession(session);
+    });
+  }, []);
+
   const districts = [
     "Dhaka",
     "Chattogram",
@@ -57,10 +67,23 @@ export default function Home() {
         />
         <div className={`flex flex-row`}>
           <div className={`${buttonStyles.button1} mr-[10px]`}>Rent a car</div>
-          <Link href="login"><div className={`${buttonStyles.button2}`}>Log In / Sign Up</div></Link>
+          {!session && (
+            <Link href="login">
+              <div className={`${buttonStyles.button2}`}>Log In / Sign Up</div>
+            </Link>
+          )}
+          {session && (
+            <Link href="dashboard">
+              <div className={`${buttonStyles.button2}`}>
+                {session.user.name}
+              </div>
+            </Link>
+          )}
         </div>
       </div>
-      <div className={`flex flex-col min-h-[88vh] justify-center ${styles.bgcover}`}>
+      <div
+        className={`flex flex-col min-h-[88vh] justify-center ${styles.bgcover}`}
+      >
         <div>
           <div className={`${fontBold.className} text-4xl`}>
             Rent <span>{carTypes[activeCarType]}</span> in{" "}
