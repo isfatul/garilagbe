@@ -29,10 +29,12 @@ export default function Login() {
     setError();
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
+    const isAdminLogin = false;
 
     const result = await signIn("credentials", {
       email,
       password,
+      isAdminLogin,
       redirect: false,
     });
 

@@ -12,7 +12,8 @@ export default NextAuth({
     Credentials({
       async authorize(credentials) {
         const table = "Users";
-        const { email, password } = credentials;
+        const { email, password, isAdminLogin } = credentials;
+        // console.log(credentials);
         const queryStr = `SELECT * FROM ${table} WHERE email=?;`;
         const values = [email];
         const user = await query({ query: queryStr, values });
@@ -20,6 +21,10 @@ export default NextAuth({
           throw new Error("No user found. Check your email and try again.");
         } else if (user[0].password !== password) {
           throw new Error("Wrong password.");
+        } else if (isAdminLogin === "true" && user[0].isAdmin === 0) {
+          throw new Error("You're not an admin.");
+        } else if (isAdminLogin === "false" && user[0].isAdmin === 1) {
+          throw new Error("You're not a user.");
         } else {
           return {
             email: user[0].email,

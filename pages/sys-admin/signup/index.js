@@ -35,7 +35,7 @@ async function createUser(name, email, password) {
   return data;
 }
 
-export default function Signup() {
+export default function SignupAdmin() {
   const nameRef = useRef();
   const emailRef = useRef();
   const passwordRef = useRef();
