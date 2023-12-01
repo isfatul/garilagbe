@@ -18,6 +18,8 @@
     "crypto": "^1.0.1",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
+    "flowbite": "^2.2.0",
+    "flowbite-react": "^0.7.0",
     "moment": "^2.29.4",
     "mysql": "^2.18.1",
     "mysql2": "^3.6.5",

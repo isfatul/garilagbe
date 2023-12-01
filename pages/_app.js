@@ -1,6 +1,7 @@
 import "@/styles/globals.css";
 import { SessionProvider, getSession, useSession } from "next-auth/react";
 import { useEffect } from "react";
+import "flowbite";
 
 export default function App({
   Component,
