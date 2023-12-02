@@ -42,12 +42,6 @@ export default function LoginAdmin() {
       setError(result.error);
     } else {
       window.location.href = "/sys-admin";
-      // if (!loading && session && session.user.isAdmin === false) {
-      //   window.location.href = "/";
-      // } else {
-      //   alert("You're not supposed to login here.");
-      //   // signOut();
-      // }
     }
   }
 

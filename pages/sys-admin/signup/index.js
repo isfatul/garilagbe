@@ -15,7 +15,7 @@ const fontBold = localFont({
   src: "../../assets/font/TeX-Gyre-Adventor/texgyreadventor-bold.otf",
 });
 
-async function createUser(name, email, password) {
+async function createAdmin(name, email, password) {
   const response = await fetch("/api/auth/sys-admin/signup", {
     method: "POST",
     body: JSON.stringify({
@@ -58,7 +58,7 @@ export default function SignupAdmin() {
       return;
     } else {
       try {
-        const response = await createUser(
+        const response = await createAdmin(
           enteredName,
           enteredEmail,
           enteredPassword
