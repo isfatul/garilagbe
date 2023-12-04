@@ -17,6 +17,7 @@ const fontBold = localFont({
 });
 
 export default function AdminWrapper({ children }) {
+  const { data: session, status } = useSession();
   return (
     <div className={font.className}>
       <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200  ">
@@ -260,10 +261,9 @@ export default function AdminWrapper({ children }) {
               </a>
             </li>
             <li>
-              <a
-                href="#"
+              <div
                 onClick={() => signOut()}
-                className="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100  group"
+                className="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100  group cursor-pointer"
               >
                 {/* <svg
                   className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75  group-hover:text-gray-900 "
@@ -296,7 +296,7 @@ export default function AdminWrapper({ children }) {
                   />
                 </svg>
                 <span className="flex-1 ms-3 whitespace-nowrap">Sign Out</span>
-              </a>
+              </div>
             </li>
             {/* <li>
               <a
@@ -325,3 +325,10 @@ export default function AdminWrapper({ children }) {
     </div>
   );
 }
+
+AdminWrapper.auth = {
+  required: true,
+  role: "admin",
+  loading: <div>Loading...</div>,
+  redirect: "/sys-admin/login",
+};
