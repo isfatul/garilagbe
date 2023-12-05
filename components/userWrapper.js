@@ -16,7 +16,7 @@ const fontBold = localFont({
   src: "../pages/assets/font/TeX-Gyre-Adventor/texgyreadventor-bold.otf",
 });
 
-export default function AdminWrapper({ children }) {
+export default function UserWrapper({ children }) {
   const { data: session, status } = useSession();
   return (
     <div className={font.className}>
@@ -54,7 +54,7 @@ export default function AdminWrapper({ children }) {
                   ></path>
                 </svg>
               </button>
-              <a href="/sys-admin" className="flex ms-2 md:me-24">
+              <a href="/" className="flex ms-2 md:me-24">
                 <Image
                   src={Logo}
                   className="h-8 w-auto sm:h-10"
@@ -63,7 +63,7 @@ export default function AdminWrapper({ children }) {
                   height={80}
                 />
                 <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap ">
-                  Admin Dashboard
+                  User Dashboard
                 </span>
               </a>
             </div>
@@ -164,7 +164,7 @@ export default function AdminWrapper({ children }) {
           <ul className="space-y-2 font-medium">
             <li>
               <a
-                href="/sys-admin"
+                href="/dashboard"
                 className="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100  group"
               >
                 <svg
@@ -200,39 +200,6 @@ export default function AdminWrapper({ children }) {
                 </span> */}
               </a>
             </li>
-            <li>
-              <a
-                href="#"
-                className="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100  group"
-              >
-                {/* <svg
-                  className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75  group-hover:text-gray-900 "
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 18 18"
-                >
-                  <path d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z" />
-                </svg> */}
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75  group-hover:text-gray-900 "
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M2.5 4A1.5 1.5 0 001 5.5V6h18v-.5A1.5 1.5 0 0017.5 4h-15zM19 8.5H1v6A1.5 1.5 0 002.5 16h15a1.5 1.5 0 001.5-1.5v-6zM3 13.25a.75.75 0 01.75-.75h1.5a.75.75 0 010 1.5h-1.5a.75.75 0 01-.75-.75zm4.75-.75a.75.75 0 000 1.5h3.5a.75.75 0 000-1.5h-3.5z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-
-                <span className="flex-1 ms-3 whitespace-nowrap">Payments</span>
-                {/* <span className="inline-flex items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full  ">
-                  Pro
-                </span> */}
-              </a>
-            </li>
             {/* <li>
               <a
                 href="#"
@@ -253,7 +220,7 @@ export default function AdminWrapper({ children }) {
                 </span>
               </a>
             </li> */}
-            <li>
+            {/* <li>
               <a
                 href="/sys-admin/users"
                 className="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100  group"
@@ -269,8 +236,8 @@ export default function AdminWrapper({ children }) {
                 </svg>
                 <span className="flex-1 ms-3 whitespace-nowrap">Users</span>
               </a>
-            </li>
-            <li>
+            </li> */}
+            {/* <li>
               <a
                 href="/sys-admin/cars"
                 className="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100  group"
@@ -292,7 +259,7 @@ export default function AdminWrapper({ children }) {
                 </svg>
                 <span className="flex-1 ms-3 whitespace-nowrap">Cars</span>
               </a>
-            </li>
+            </li> */}
             <li>
               <div
                 onClick={() => signOut()}
@@ -359,9 +326,8 @@ export default function AdminWrapper({ children }) {
   );
 }
 
-AdminWrapper.auth = {
+UserWrapper.auth = {
   required: true,
-  role: "admin",
   loading: <div>Loading...</div>,
-  redirect: "/sys-admin/login",
+  redirect: "/login",
 };

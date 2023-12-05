@@ -50,12 +50,23 @@ export default function Addnew() {
     const height = heightRef.current.value;
     const doors = doorsRef.current.value;
     var insurance = hasInsurance ? insuranceRef.current.value : null;
-    const coverage = coverageRef.current.value;
-    const company = companyRef.current.value;
-    const policy = policyRef.current.value;
-    const expiration = expirationRef.current.value;
 
     if (!hasInsurance) {
+      var coverage =
+        !hasInsurance || hasInsurance !== null
+          ? coverageRef.current.value
+          : null;
+      var company =
+        !hasInsurance || hasInsurance !== null
+          ? companyRef.current.value
+          : null;
+      var policy =
+        !hasInsurance || hasInsurance !== null ? policyRef.current.value : null;
+      var expiration =
+        !hasInsurance || hasInsurance !== null
+          ? expirationRef.current.value
+          : null;
+
       const insuranceResult = await fetch("/api/cars/add-insurance", {
         method: "POST",
         headers: {
@@ -68,39 +79,46 @@ export default function Addnew() {
           exp_date: expiration,
         }),
       });
-      if (insuranceResult.error) {
-        setError(insuranceResult.error);
+      if (!insuranceResult.ok) {
+        setError("Insurance could not be added");
         return;
+      } else {
+        const insuranceResultJS = await insuranceResult.json();
+        insurance = insuranceResultJS.insurance_id;
       }
-      insurance = insuranceResult.insurance_id;
     }
 
-    const result = await fetch("/api/cars/add-new", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        number_plate: plate,
-        VIN: vin,
-        color,
-        body,
-        make,
-        year,
-        seats,
-        height,
-        doors,
-        insurance_id: insurance,
-      }),
-    });
-
-    if (result.error) {
-      setError(result.error);
-      setLoading(false);
-      return;
+    if (insurance) {
+      const result = await fetch("/api/cars/add-new", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          number_plate: plate,
+          VIN: vin,
+          color,
+          body,
+          make,
+          year,
+          seats,
+          height,
+          doors,
+          insurance_id: insurance,
+        }),
+      });
+      // console.log(result);
+      if (!result.ok) {
+        setError("Error adding car");
+        setLoading(false);
+        return;
+      } else {
+        window.location.href = "/sys-admin/cars";
+      }
     } else {
-      window.location.href = "/sys-admin/cars";
+      setError("Insurance ID not found");
+      setLoading(false);
     }
   }
 
@@ -134,6 +152,12 @@ export default function Addnew() {
               Add a new car
             </div>
           </div>
+          <div
+            className={`text-right ${fontBold.className}`}
+            style={{ color: "red" }}
+          >
+            {error}
+          </div>
           <form onSubmit={handleSubmit} className={`flex flex-col`}>
             <div className={`flex md:flex-row flex-col md:mb-4 mb-2`}>
               <div className="flex-[1] min-w-[300px]">
@@ -144,6 +168,7 @@ export default function Addnew() {
                   type="text"
                   ref={nameRef}
                   placeholder="Name"
+                  required
                   className="w-full border-2 border-gray-400 rounded-md p-2 mt-2 "
                 />
               </div>
@@ -155,6 +180,7 @@ export default function Addnew() {
                 <input
                   type="text"
                   ref={plateRef}
+                  required
                   placeholder="Plate Number"
                   className="w-full border-2 border-gray-400 rounded-md p-2 mt-2 "
                 />
@@ -168,6 +194,7 @@ export default function Addnew() {
                 <input
                   type="text"
                   ref={vinRef}
+                  required
                   placeholder="VIN"
                   className="w-full border-2 border-gray-400 rounded-md p-2 mt-2 "
                 />

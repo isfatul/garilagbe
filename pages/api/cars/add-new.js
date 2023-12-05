@@ -17,6 +17,8 @@ export default async function handler(req, res) {
       doors,
       insurance_id,
     } = req.body;
+
+    console.log(req.body);
     const car_ID = uuidv4();
 
     const results = await query({
@@ -29,17 +31,18 @@ export default async function handler(req, res) {
         name,
         number_plate,
         VIN,
-        color,
-        body,
-        make,
-        year,
-        seats,
-        height,
-        doors,
+        color || null,
+        body || null,
+        make || null,
+        year || null,
+        seats || null,
+        height || null,
+        doors || null,
         insurance_id,
       ],
     });
 
+    console.log(results);
     /*
     const testRequestBody = {
         name: "Test Car",
@@ -54,7 +57,12 @@ export default async function handler(req, res) {
         doors: 4,
         insurance_id: "XYZ789"
     };*/
+    if (results.error) {
+      await res.status(400).json(results);
+    } else {
+      await res.status(200).json({ ...results, car_ID });
+    }
 
-    await res.status(200).json({ ...results, car_ID });
+    // await res.status(200).json({ ...results, car_ID });
   }
 }

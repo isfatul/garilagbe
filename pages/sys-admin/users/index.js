@@ -15,16 +15,16 @@ const fontBold = localFont({
   src: "../../assets/font/TeX-Gyre-Adventor/texgyreadventor-bold.otf",
 });
 
-export default function Cars() {
-  const [cars, setCars] = useState();
+export default function Users() {
+  const [users, setUsers] = useState();
 
   useEffect(() => {
-    async function getCars() {
-      const res = await fetch("/api/cars/get-cars");
+    async function getUsers() {
+      const res = await fetch("/api/getUsers");
       const data = await res.json();
-      setCars(data);
+      setUsers(data);
     }
-    getCars();
+    getUsers();
   }, []);
 
   const { data: session } = useSession();
@@ -34,12 +34,12 @@ export default function Cars() {
         <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg  mt-14">
           <div className="flex flex-row w-full align-center text-center justify-space-between mb-4">
             <div className={`py-1 ${fontBold.className} text-lg`}>
-              Cars ({cars && Object.keys(cars).length})
+              Users ({users && Object.keys(users).length})
             </div>
             <div className="flex-1"></div>
-            <a href="/sys-admin/cars/add-new">
+            {/* <a href="/sys-admin/cars/add-new">
               <div className={` ${buttonStyles.button1}`}>Add a new car</div>
-            </a>
+            </a> */}
           </div>
           <div
             style={{
@@ -48,8 +48,8 @@ export default function Cars() {
               gap: "10px",
             }}
           >
-            {cars &&
-              cars.map((car) => {
+            {users &&
+              users.map((user) => {
                 return (
                   <div
                     className="w-full hover:bg-gray-100 cursor-pointer"
@@ -63,19 +63,20 @@ export default function Cars() {
                       <div
                         className="flex-[1] text-lg"
                         onClick={() => {
-                          window.location.href = `/sys-admin/cars/${car.car_ID}`;
+                          window.location.href = `/sys-admin/users/${user.user_ID}`;
                         }}
                       >
-                        {car.name} [{car.number_plate}]
+                        {user.name}
+                        {/* [{user.email}] */}
                       </div>
                       <div
                         onClick={async () => {
-                          const res = await fetch("/api/cars/delete-car", {
+                          const res = await fetch("/api/dropUser", {
                             method: "DELETE",
                             headers: {
                               "Content-Type": "application/json",
                             },
-                            body: JSON.stringify({ car_ID: car.car_ID }),
+                            body: JSON.stringify({ user_ID: user.user_ID }),
                           });
                           const data = await res.json();
                           console.log(data);
@@ -101,21 +102,30 @@ export default function Cars() {
                     <div
                       className="text-xs"
                       onClick={() => {
-                        window.location.href = `/sys-admin/cars/${car.car_ID}`;
+                        window.location.href = `/sys-admin/users/${user.user_ID}`;
                       }}
                     >
-                      <span className={`${fontBold.className}`}>Car ID: </span>
-                      {car.car_ID}
+                      <span className={`${fontBold.className}`}>Email: </span>
+                      {user.email}
                     </div>
                     <div
                       className="text-xs"
                       onClick={() => {
-                        window.location.href = `/sys-admin/cars/${car.car_ID}`;
+                        window.location.href = `/sys-admin/users/${user.user_ID}`;
+                      }}
+                    >
+                      <span className={`${fontBold.className}`}>User ID: </span>
+                      {user.user_ID}
+                    </div>
+                    {/* <div
+                      className="text-xs"
+                      onClick={() => {
+                        window.location.href = `/sys-admin/cars/${user.user_ID}`;
                       }}
                     >
                       <span className={`${fontBold.className}`}>VIN: </span>
                       {car.VIN}
-                    </div>
+                    </div> */}
                   </div>
                 );
               })}
@@ -126,7 +136,7 @@ export default function Cars() {
   );
 }
 
-Cars.auth = {
+Users.auth = {
   required: true,
   role: "admin",
   loading: <div>Loading...</div>,
