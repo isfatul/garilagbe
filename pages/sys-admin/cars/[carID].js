@@ -2,6 +2,10 @@ import AdminWrapper from "@/components/adminWrapper";
 import localFont from "next/font/local";
 import buttonStyles from "@/styles/buttons.module.css";
 import Router from "next/router";
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
+import { useEffect, useState, useRef } from "react";
+import Image from "next/image";
 
 const font = localFont({
   src: "../../assets/font/TeX-Gyre-Adventor/texgyreadventor-regular.otf",
@@ -11,13 +15,45 @@ const fontBold = localFont({
 });
 
 export default function CarDetails() {
+  const router = useRouter();
+  const carID = router.query.carID;
+  const [car, setCar] = useState();
+
+  const { data: session } = useSession();
+
+  const getCarDetails = async () => {
+    try {
+      const res = await fetch("/api/cars/get-car-details", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          car_ID: carID,
+        }),
+      });
+      const data = await res.json();
+
+      setCar(data);
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    if (carID) {
+      getCarDetails();
+    }
+  }, [carID]);
+
   return (
     <AdminWrapper>
       <div className="p-4 sm:ml-64">
         <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg  mt-14">
           <div className="flex flex-row mb-8">
             <div
-              className="flex flex-row cursor-pointer hover:text-gray-1000 p-5"
+              className="flex flex-row cursor-pointer hover:text-gray-1000 "
               onClick={() => Router.back()}
             >
               <svg
@@ -37,8 +73,56 @@ export default function CarDetails() {
               </svg>
               <div>Go back</div>
             </div>
-            <div className={`${fontBold.className} flex-1 text-center`}>
-              Car details
+            <div
+              className={`${fontBold.className} text-xl flex-[1] text-center`}
+            >
+              {car && car.name}
+            </div>
+          </div>
+          <div className={`flex md:flex-row flex-col-reverse justify`}>
+            <div className="flex-[1] md:mt-0 mt-3">
+              <div className="text-xl">
+                <span className={fontBold.className}>Plate number:</span>{" "}
+                {car && car.number_plate}
+              </div>
+              <div>
+                <span className={fontBold.className}>VIN: </span>
+                {car && car.VIN}
+              </div>
+              <div>
+                <span className={fontBold.className}>Car ID: </span>
+                {car && car.car_ID}
+              </div>
+              <br />
+              <div>
+                <span className={fontBold.className}>Insurance Details: </span>
+                <br />
+                <div>
+                  <span className={fontBold.className}>Insurance ID: </span>
+                  {car && car.insurance_id}
+                </div>
+                <div>
+                  <span className={fontBold.className}>Coverage: </span>
+                  {car && car.coverage}
+                </div>
+                <div>
+                  <span className={fontBold.className}>Company: </span>
+                  {car && car.company}
+                </div>
+                <div>
+                  <span className={fontBold.className}>Policy No: </span>
+                  {car && car.policy_no}
+                </div>
+              </div>
+            </div>
+            <div>
+              <Image
+                src={car && car.carImageURL}
+                width={600}
+                height={600}
+                className="h-250 w-300"
+                style={{ objectFit: "cover", borderRadius: "15px" }}
+              />
             </div>
           </div>
         </div>

@@ -4,6 +4,7 @@ import Image from "next/image";
 import Router from "next/router";
 import localFont from "next/font/local";
 import buttonStyles from "@/styles/buttons.module.css";
+import { storage } from "@/lib/firebase"; // Import the Firebase storage module
 
 const font = localFont({
   src: "../../../assets/font/TeX-Gyre-Adventor/texgyreadventor-regular.otf",
@@ -12,8 +13,43 @@ const fontBold = localFont({
   src: "../../../assets/font/TeX-Gyre-Adventor/texgyreadventor-bold.otf",
 });
 
+function delay(t, v) {
+  return new Promise(function (resolve) {
+    setTimeout(resolve.bind(null, v), t);
+  });
+}
+
+function keepTrying(triesRemaining, storageRef) {
+  if (triesRemaining < 0) {
+    return Promise.reject("out of tries");
+  }
+
+  return storageRef
+    .getDownloadURL()
+    .then((url) => {
+      return url;
+    })
+    .catch((error) => {
+      switch (error.code) {
+        case "storage/object-not-found":
+          return delay(2000).then(() => {
+            return keepTrying(triesRemaining - 1, storageRef);
+          });
+        default:
+          console.log(error);
+          return Promise.reject(error);
+      }
+    });
+}
+
 export default function Addnew() {
   const [hasInsurance, setHasInsurance] = useState(null);
+  const [carImage, setCarImage] = useState(null);
+  const [carImageURL, setCarImageURL] = useState(null);
+
+  function handleImageChange(e) {
+    setCarImage(e.target.files[0]);
+  }
 
   const [error, setError] = useState();
   // const { session, loading } = useSession();
@@ -50,74 +86,119 @@ export default function Addnew() {
     const height = heightRef.current.value;
     const doors = doorsRef.current.value;
     var insurance = hasInsurance ? insuranceRef.current.value : null;
+    let curl = null;
 
-    if (!hasInsurance) {
-      var coverage =
-        !hasInsurance || hasInsurance !== null
-          ? coverageRef.current.value
-          : null;
-      var company =
-        !hasInsurance || hasInsurance !== null
-          ? companyRef.current.value
-          : null;
-      var policy =
-        !hasInsurance || hasInsurance !== null ? policyRef.current.value : null;
-      var expiration =
-        !hasInsurance || hasInsurance !== null
-          ? expirationRef.current.value
-          : null;
+    console.log(carImage);
 
-      const insuranceResult = await fetch("/api/cars/add-insurance", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          coverage,
-          company,
-          policy_no: policy,
-          exp_date: expiration,
-        }),
+    const storageRef = storage.ref(); // Get a reference to the Firebase storage root
+
+    const imageRef = storageRef.child(carImage.name); // Create a reference to the image file in Firebase storage
+    const uploadTask = imageRef.put(carImage); // Upload the image file to Firebase storage
+
+    try {
+      await new Promise((resolve, reject) => {
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            // Track the upload progress if needed
+          },
+          (error) => {
+            console.error("Error uploading image:", error);
+            reject(error);
+          },
+          () => {
+            // When the upload is complete, get the download URL
+            keepTrying(10, imageRef)
+              .then((url) => {
+                console.log("Download URL:", url);
+                setCarImageURL(url);
+                curl = url;
+                resolve();
+              })
+              .catch((error) => {
+                console.error("Error getting download URL:", error);
+                reject(error);
+              });
+          }
+        );
       });
-      if (!insuranceResult.ok) {
-        setError("Insurance could not be added");
-        return;
-      } else {
-        const insuranceResultJS = await insuranceResult.json();
-        insurance = insuranceResultJS.insurance_id;
+
+      if (!hasInsurance) {
+        var coverage =
+          !hasInsurance || hasInsurance !== null
+            ? coverageRef.current.value
+            : null;
+        var company =
+          !hasInsurance || hasInsurance !== null
+            ? companyRef.current.value
+            : null;
+        var policy =
+          !hasInsurance || hasInsurance !== null
+            ? policyRef.current.value
+            : null;
+        var expiration =
+          !hasInsurance || hasInsurance !== null
+            ? expirationRef.current.value
+            : null;
+
+        const insuranceResult = await fetch("/api/cars/add-insurance", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            coverage,
+            company,
+            policy_no: policy,
+            exp_date: expiration,
+          }),
+        });
+
+        if (!insuranceResult.ok) {
+          setError("Insurance could not be added");
+          setLoading(false);
+          return;
+        } else {
+          const insuranceResultJS = await insuranceResult.json();
+          insurance = insuranceResultJS.insurance_id;
+        }
       }
-    }
 
-    if (insurance) {
-      const result = await fetch("/api/cars/add-new", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-          number_plate: plate,
-          VIN: vin,
-          color,
-          body,
-          make,
-          year,
-          seats,
-          height,
-          doors,
-          insurance_id: insurance,
-        }),
-      });
-      // console.log(result);
-      if (!result.ok) {
-        setError("Error adding car");
+      if (insurance) {
+        const result = await fetch("/api/cars/add-new", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name,
+            number_plate: plate,
+            VIN: vin,
+            color,
+            body,
+            make,
+            year,
+            seats,
+            height,
+            doors,
+            carImageURL: curl || "",
+            insurance_id: insurance,
+          }),
+        });
+
+        if (!result.ok) {
+          setError("Error adding car");
+          setLoading(false);
+          return;
+        } else {
+          window.location.href = "/sys-admin/cars";
+        }
+      } else {
+        setError("Insurance ID not found");
         setLoading(false);
-        return;
-      } else {
-        window.location.href = "/sys-admin/cars";
       }
-    } else {
-      setError("Insurance ID not found");
+    } catch (error) {
+      console.error("Error:", error);
       setLoading(false);
     }
   }
@@ -212,12 +293,14 @@ export default function Addnew() {
               <div className="md:w-4 h-2"></div>
               <div className="flex-[1]">
                 <div className={`${fontBold.className} text-xs`}>Body</div>
-                <input
-                  type="text"
+                <select
                   ref={bodyRef}
-                  placeholder="Body"
-                  className="w-full border-2 border-gray-400 rounded-md p-2 mt-2 "
-                />
+                  className="w-full border-2 border-gray-400 rounded-md p-2 mt-2"
+                >
+                  <option value="SUV">SUV</option>
+                  <option value="Luxury Sedan">Luxury Sedan</option>
+                  <option value="Minivan">Minivan</option>
+                </select>
               </div>
             </div>
             <div className={`flex md:flex-row flex-col md:mb-4 mb-2`}>
@@ -278,14 +361,14 @@ export default function Addnew() {
               </div>
               <div className="md:w-4 h-2"></div>
               <div className="flex-[1]">
-                {/* <div className={`${fontBold.className} text-xs`}>
-                  Insurance ID
-                </div>
+                <div className={`${fontBold.className} text-xs`}>Image</div>
                 <input
-                  type="text"
-                  placeholder="Insurance ID"
-                  className="w-full border-2 border-gray-400 rounded-md p-2 mt-2 "
-                /> */}
+                  type="file"
+                  placeholder="Image"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="w-full border-2 border-gray-400 rounded-md  mt-2 border-none"
+                />
               </div>
             </div>
             <div className={`flex md:flex-row flex-col md:mb-4 mb-2`}>

@@ -27,10 +27,9 @@ export default NextAuth({
           throw new Error("You're not a user.");
         } else {
           return {
+            id: user[0].user_ID,
             email: user[0].email,
             name: user[0].name,
-            id: user[0].user_ID,
-            isAdmin: user[0].isAdmin,
           };
         }
       },

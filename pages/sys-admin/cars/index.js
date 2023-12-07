@@ -6,7 +6,7 @@ import logo from "@/pages/assets/Garilagbe.png";
 import localFont from "next/font/local";
 import { useSession } from "next-auth/react";
 import buttonStyles from "@/styles/buttons.module.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 const font = localFont({
   src: "../../assets/font/TeX-Gyre-Adventor/texgyreadventor-regular.otf",
@@ -17,6 +17,10 @@ const fontBold = localFont({
 
 export default function Cars() {
   const [cars, setCars] = useState();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredCars, setFilteredCars] = useState([]);
+
+  const searchRef = useRef();
 
   useEffect(() => {
     async function getCars() {
@@ -26,6 +30,24 @@ export default function Cars() {
     }
     getCars();
   }, []);
+
+  useEffect(() => {
+    if (searchTerm !== "") {
+      console.log(searchTerm);
+      const filteredCars = cars.filter((car) => {
+        return (
+          car.name.toLowerCase().includes(searchTerm) ||
+          car.car_ID.toLowerCase().includes(searchTerm) ||
+          car.VIN.toLowerCase().includes(searchTerm) ||
+          car.number_plate.toLowerCase().includes(searchTerm) ||
+          car.body.toLowerCase().includes(searchTerm)
+        );
+      });
+      setFilteredCars(filteredCars);
+    } else {
+      setFilteredCars(cars);
+    }
+  }, [cars, searchTerm]);
 
   const { data: session } = useSession();
   return (
@@ -37,8 +59,36 @@ export default function Cars() {
               Cars ({cars && Object.keys(cars).length})
             </div>
             <div className="flex-1"></div>
+            <div>
+              <input
+                type="text"
+                placeholder="Search"
+                value={searchTerm}
+                ref={searchRef}
+                onChange={(e) => {
+                  setSearchTerm((prev) => e.target.value.toLowerCase());
+                  console.log(searchTerm);
+                }}
+                className="w-full border-1 border-gray-200 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-transparent"
+              ></input>
+            </div>
             <a href="/sys-admin/cars/add-new">
-              <div className={` ${buttonStyles.button1}`}>Add a new car</div>
+              <div className={`flex flex-row ml-4 ${buttonStyles.button1}`}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  class="w-6 h-6"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+
+                <div className="pl-2">Add a new car</div>
+              </div>
             </a>
           </div>
           <div
@@ -48,8 +98,8 @@ export default function Cars() {
               gap: "10px",
             }}
           >
-            {cars &&
-              cars.map((car) => {
+            {filteredCars &&
+              filteredCars.map((car) => {
                 return (
                   <div
                     className="w-full hover:bg-gray-100 cursor-pointer"
@@ -115,6 +165,20 @@ export default function Cars() {
                     >
                       <span className={`${fontBold.className}`}>VIN: </span>
                       {car.VIN}
+                    </div>
+                    <div
+                      // className="text-xs"
+                      onClick={() => {
+                        window.location.href = `/sys-admin/cars/${car.car_ID}`;
+                      }}
+                    >
+                      <Image
+                        src={car.carImageURL}
+                        height={200}
+                        width={300}
+                        className="w-full mt-2 h-[250px] object-cover"
+                        style={{ borderRadius: "15px" }}
+                      />
                     </div>
                   </div>
                 );

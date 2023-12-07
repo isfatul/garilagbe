@@ -15,6 +15,7 @@ export default async function handler(req, res) {
       seats,
       height,
       doors,
+      carImageURL,
       insurance_id,
     } = req.body;
 
@@ -22,9 +23,9 @@ export default async function handler(req, res) {
     const car_ID = uuidv4();
 
     const results = await query({
-      query: `INSERT INTO Cars (car_ID, name, number_plate, VIN, color, body, make, year, seats, height, doors, insurance_id) VALUE
+      query: `INSERT INTO Cars (car_ID, name, number_plate, VIN, color, body, make, year, seats, height, doors, carImageURL, insurance_id) VALUE
         (
-            ?,?,?,?,?,?,?,?,?,?,?,?
+            ?,?,?,?,?,?,?,?,?,?,?,?,?
         );`,
       values: [
         car_ID,
@@ -38,6 +39,7 @@ export default async function handler(req, res) {
         seats || null,
         height || null,
         doors || null,
+        carImageURL,
         insurance_id,
       ],
     });
