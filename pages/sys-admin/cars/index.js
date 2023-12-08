@@ -107,6 +107,7 @@ export default function Cars() {
                       border: "1px dashed grey",
                       padding: "15px 10px",
                       borderRadius: "5px",
+                      position: "relative",
                     }}
                   >
                     <div className={`${fontBold.className} flex flex-row`}>
@@ -179,6 +180,38 @@ export default function Cars() {
                         className="w-full mt-2 h-[250px] object-cover"
                         style={{ borderRadius: "15px" }}
                       />
+                    </div>
+                    <div
+                      style={{
+                        position: "absolute",
+                        bottom: "8%",
+                        right: "5%",
+                        display: "flex",
+                        flexDirection: "row",
+                      }}
+                      className={`${fontBold.className}`}
+                    >
+                      <div
+                        className="text-xs"
+                        style={{
+                          padding: "5px",
+                          backgroundColor: "white",
+                          borderRadius: "10px",
+                          marginRight: "5px",
+                        }}
+                      >
+                        Daily: {car.dailyRate}BDT
+                      </div>
+                      <div
+                        className="text-xs"
+                        style={{
+                          padding: "5px",
+                          backgroundColor: "white",
+                          borderRadius: "10px",
+                        }}
+                      >
+                        Weekly: {car.weeklyRate}BDT
+                      </div>
                     </div>
                   </div>
                 );

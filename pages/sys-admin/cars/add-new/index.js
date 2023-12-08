@@ -70,6 +70,8 @@ export default function Addnew() {
   const companyRef = useRef();
   const policyRef = useRef();
   const expirationRef = useRef();
+  const dailyRateRef = useRef();
+  const weeklyRateRef = useRef();
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -85,6 +87,9 @@ export default function Addnew() {
     const seats = seatsRef.current.value;
     const height = heightRef.current.value;
     const doors = doorsRef.current.value;
+    const dailyRate = dailyRateRef.current.value;
+    const weeklyRate = weeklyRateRef.current.value;
+
     var insurance = hasInsurance ? insuranceRef.current.value : null;
     let curl = null;
 
@@ -181,6 +186,8 @@ export default function Addnew() {
             seats,
             height,
             doors,
+            dailyRate,
+            weeklyRate,
             carImageURL: curl || "",
             insurance_id: insurance,
           }),
@@ -368,6 +375,32 @@ export default function Addnew() {
                   accept="image/*"
                   onChange={handleImageChange}
                   className="w-full border-2 border-gray-400 rounded-md  mt-2 border-none"
+                />
+              </div>
+            </div>
+            <div className={`flex md:flex-row flex-col md:mb-4 mb-2`}>
+              <div className="flex-[1]">
+                <div className={`${fontBold.className} text-xs`}>
+                  Daily Rate (in BDT)
+                </div>
+                <input
+                  type="text"
+                  placeholder="Daily Rate"
+                  ref={dailyRateRef}
+                  className="w-full border-2 border-gray-400 rounded-md p-2 mt-2 "
+                />
+              </div>
+              <div className="md:w-4 h-2"></div>
+              <div className="flex-[1]">
+                <div className={`${fontBold.className} text-xs`}>
+                  Weekly Rate (in BDT)
+                </div>
+                <input
+                  type="number"
+                  min={2}
+                  ref={weeklyRateRef}
+                  placeholder="Weekly Rate"
+                  className="w-full border-2 border-gray-400 rounded-md p-2 mt-2 "
                 />
               </div>
             </div>
