@@ -224,7 +224,7 @@ export default function Checkout() {
                         pickupDate,
                         dropoffDate,
                         amount,
-                        payment_method: "bkash",
+                        payment_method: "Credit Card",
                         payment_details: JSON.stringify({
                           ...data,
                         }),
@@ -249,7 +249,7 @@ export default function Checkout() {
                       <input
                         type="text"
                         placeholder="Name"
-                        name="credit-name"
+                        name="credit_name"
                         autoComplete="cc-name"
                         required
                         className="w-full border-2 border-gray-400 rounded-md p-2 mt-2 "
@@ -265,7 +265,7 @@ export default function Checkout() {
                       <input
                         type="tel"
                         placeholder="XXXX-XXXX-XXXX-XXXX"
-                        name="credit-number"
+                        name="credit_number"
                         autoComplete="cc-number"
                         maxLength={19}
                         pattern="[0-9\s]{13,19}"
@@ -283,7 +283,7 @@ export default function Checkout() {
                       <input
                         type="tel"
                         placeholder="MM/YY"
-                        name="credit-expiry"
+                        name="credit_expiry"
                         autoComplete="cc-exp"
                         maxLength={5}
                         pattern="\d\d/\d\d"
@@ -300,7 +300,7 @@ export default function Checkout() {
                       <input
                         type="password"
                         placeholder="***"
-                        name="credit-vcc"
+                        name="credit_vcc"
                         autoComplete="cc-csc"
                         maxLength={3}
                         pattern="\d{3,4}"
@@ -365,7 +365,7 @@ export default function Checkout() {
                         pickupDate,
                         dropoffDate,
                         amount,
-                        payment_method: "bkash",
+                        payment_method: "bKash",
                         payment_details: JSON.stringify({
                           bkashNumber: bkashNumberRef.current.value,
                           ...data,
@@ -514,7 +514,7 @@ export default function Checkout() {
                       <input
                         type="tel"
                         placeholder="TrxID"
-                        name="trx-id"
+                        name="trxID"
                         maxLength={19}
                         pattern="[0-9\s]{13,19}"
                         required

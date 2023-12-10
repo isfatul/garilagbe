@@ -55,7 +55,7 @@ export default function dashboard() {
                   </option>
                   <option value="SUV">SUV</option>
                   <option value="Sedan">Sedan</option>
-                  <option value="Minivan">Minivan</option>
+                  <option value="Microbus">Microbus</option>
                 </select>
               </div>
               <div className="w-full sm:mr-2 mb-2">

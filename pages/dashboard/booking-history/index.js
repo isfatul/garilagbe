@@ -11,7 +11,7 @@ const fontBold = localFont({
   src: "../../assets/font/TeX-Gyre-Adventor/texgyreadventor-bold.otf",
 });
 
-export default function Bookings() {
+export default function BookingHistory() {
   const [sesh, setSesh] = useState(null);
   useEffect(() => {
     getSession().then(async (session) => {
@@ -46,7 +46,7 @@ export default function Bookings() {
 
   useEffect(() => {
     if (user) {
-      fetch("/api/booking/getUserBookings", {
+      fetch("/api/booking/getBookingHistory", {
         method: "POST",
         body: JSON.stringify({
           user_ID: user.user_ID,
@@ -70,7 +70,7 @@ export default function Bookings() {
             <div
               className={`${fontBold.className} text-xl flex-[1] text-center`}
             >
-              Active Bookings
+              Booking History
             </div>
           </div>
           <div
@@ -134,7 +134,7 @@ export default function Bookings() {
   );
 }
 
-Bookings.auth = {
+BookingHistory.auth = {
   required: true,
   loading: <div>Loading...</div>,
   redirect: "/login",

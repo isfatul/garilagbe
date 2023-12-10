@@ -121,11 +121,11 @@ export default function Search() {
                   <option value="SUV" selected={carType === "SUV"}>
                     SUV
                   </option>
-                  <option value="Sedan" selected={carType === "SUV"}>
+                  <option value="Sedan" selected={carType === "Sedan"}>
                     Sedan
                   </option>
-                  <option value="Minivan" selected={carType === "SUV"}>
-                    Minivan
+                  <option value="Microbus" selected={carType === "Microbus"}>
+                    Microbus
                   </option>
                 </select>
               </div>

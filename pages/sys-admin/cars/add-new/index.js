@@ -306,7 +306,7 @@ export default function Addnew() {
                 >
                   <option value="SUV">SUV</option>
                   <option value="Luxury Sedan">Luxury Sedan</option>
-                  <option value="Minivan">Minivan</option>
+                  <option value="Microbus">Microbus</option>
                 </select>
               </div>
             </div>
