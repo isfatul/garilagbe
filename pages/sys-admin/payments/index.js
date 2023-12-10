@@ -50,6 +50,7 @@ export default function Payments() {
               </thead>
               <tbody>
                 {payments &&
+                  payments.length > 0 &&
                   payments.map((payment) => (
                     <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                       <td className="border px-4 py-2">{payment.payment_ID}</td>

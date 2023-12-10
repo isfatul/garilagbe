@@ -254,18 +254,18 @@ export default function AdminWrapper({ children }) {
                 <ul id="dropdown-example" class="hidden py-2 space-y-2">
                   <li>
                     <a
-                      href="#"
+                      href="/sys-admin/bookings/active"
                       class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                     >
-                      Products
+                      Active Bookings
                     </a>
                   </li>
                   <li>
                     <a
-                      href="#"
+                      href="/sys-admin/bookings/past"
                       class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                     >
-                      Billing
+                      Past Bookings
                     </a>
                   </li>
                   <li>

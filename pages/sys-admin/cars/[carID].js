@@ -47,6 +47,35 @@ export default function CarDetails() {
     }
   }, [carID]);
 
+  const [bookings, setBookings] = useState(null);
+  useEffect(() => {
+    if (car) {
+      fetch("/api/booking/getBookingsByCar", {
+        method: "POST",
+        body: JSON.stringify({
+          car_ID: car.car_ID,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then(async (res) => {
+        const data = await res.json();
+        setBookings(data);
+        console.log(data);
+      });
+    }
+  }, [car]);
+
+  const isBookingActiveToday = (booking) => {
+    const today = new Date();
+    const pickupDate = new Date(booking.pickup_date);
+    const dropoffDate = new Date(booking.dropoff_date);
+    if (today >= pickupDate && today <= dropoffDate) {
+      return true;
+    }
+    return false;
+  };
+
   return (
     <AdminWrapper>
       <div className="p-4 sm:ml-64">
@@ -80,7 +109,7 @@ export default function CarDetails() {
             </div>
           </div>
           <div className={`flex md:flex-row flex-col-reverse justify`}>
-            <div className="flex-[1] md:mt-0 mt-3">
+            <div className="flex-[1] md:mt-0 mt-3 mr-3">
               <div className="text-xl">
                 <span className={fontBold.className}>Plate number:</span>{" "}
                 {car && car.number_plate}
@@ -114,16 +143,83 @@ export default function CarDetails() {
                   {car && car.policy_no}
                 </div>
               </div>
+              <br />
             </div>
             <div>
               <Image
                 src={car && car.carImageURL}
-                width={600}
-                height={600}
+                width={400}
+                height={400}
                 className="h-250 w-300"
                 style={{ objectFit: "cover", borderRadius: "15px" }}
               />
             </div>
+          </div>
+          <div>
+            <span className={fontBold.className}>Rental Details: </span>
+            <br />
+          </div>
+          <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <table className="w-full text-sm text-left rtl:text-right text-gray-500">
+              <thead className="text-sm text-gray-700 uppercase bg-gray-50 ">
+                <tr className={fontBold.className}>
+                  <th className="px-4 py-2">Reservation ID</th>
+                  <th className="px-4 py-2">Payment ID</th>
+                  <th className="px-4 py-2">User ID</th>
+                  <th className="px-4 py-2">Pick Up</th>
+                  <th className="px-4 py-2">Drop Off</th>
+                  <th className="px-4 py-2">Payment Method</th>
+                  <th className="px-4 py-2">Amount</th>
+                  <th className="px-3 py-2">Created at</th>
+                </tr>
+              </thead>
+              <tbody>
+                {bookings &&
+                  bookings.map((booking) => (
+                    <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                      <td className="border px-4 py-2">
+                        {isBookingActiveToday(booking) && (
+                          <span style={{ color: "green" }}>●</span>
+                        )}{" "}
+                        {booking.res_ID}
+                      </td>
+                      <td className="border px-4 py-2">{booking.payment_ID}</td>
+                      <td className="border px-4 py-2">{booking.user_ID}</td>
+                      <td className="border px-4 py-2">
+                        {booking.pickup_date.substring(0, 10)}
+                      </td>
+                      <td className="border px-4 py-2">
+                        {booking.dropoff_date.substring(0, 10)}
+                      </td>
+                      <td className="border px-4 py-2">
+                        {booking.payment_method}{" "}
+                        {booking.payment_method === "Credit Card" &&
+                          booking.payment_details && (
+                            <span>
+                              (
+                              {JSON.parse(
+                                booking.payment_details
+                              ).credit_number.slice(-4)}
+                              )
+                            </span>
+                          )}
+                        {booking.payment_method === "bKash" &&
+                          booking.payment_details && (
+                            <span>
+                              ({JSON.parse(booking.payment_details).bkashNumber}
+                              )
+                            </span>
+                          )}
+                      </td>
+                      <td className="border px-4 py-2">{booking.amount}</td>
+                      <td className="border px-4 py-2">
+                        {booking.payment_date &&
+                          booking.payment_date.substring(0, 10)}
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

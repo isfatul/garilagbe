@@ -285,3 +285,9 @@ export default function Search() {
     </UserWrapper>
   );
 }
+
+Search.auth = {
+  required: true,
+  loading: <div>Loading...</div>,
+  redirect: "/login",
+};
