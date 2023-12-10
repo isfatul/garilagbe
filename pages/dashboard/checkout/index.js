@@ -456,13 +456,14 @@ export default function Checkout() {
 
                           return (
                             <span
-                              className="text-lg"
+                              className={`text-lg ${fontBold.className}`}
                               style={{ color: "#b43737" }}
                             >
                               ৳{leastAmount + leastAmount * 0.15}
                             </span>
                           );
-                        })()}
+                        })()}{" "}
+                      (incl. VAT)
                     </div>
                     <div>
                       <span className={fontBold.className}>Account Type:</span>{" "}
@@ -515,7 +516,7 @@ export default function Checkout() {
                         type="tel"
                         placeholder="TrxID"
                         name="trxID"
-                        maxLength={19}
+                        maxLength={10}
                         pattern="[0-9\s]{13,19}"
                         required
                         className="w-full border-2 border-gray-400 rounded-md p-2 mt-2 "

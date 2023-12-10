@@ -18,7 +18,7 @@ export default async function handler(req, res) {
 
     const results = await query({
       query:
-        "INSERT INTO Payments (payment_ID, user_ID, res_ID, amount, payment_method, payment_details ) VALUES (?, ?, ?, ?, ?, ?)",
+        "INSERT INTO Payments (payment_ID, user_ID, res_ID, amount, payment_method, payment_details, payment_date ) VALUES (?, ?, ?, ?, ?, ?, NOW())",
       values: [
         payment_ID,
         user_ID,

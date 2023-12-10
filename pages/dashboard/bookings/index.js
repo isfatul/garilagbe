@@ -62,6 +62,16 @@ export default function Bookings() {
     }
   }, [user]);
 
+  const isBookingActiveToday = (booking) => {
+    const today = new Date();
+    const pickupDate = new Date(booking.pickup_date);
+    const dropoffDate = new Date(booking.dropoff_date);
+    if (today >= pickupDate && today <= dropoffDate) {
+      return true;
+    }
+    return false;
+  };
+
   return (
     <UserWrapper>
       <div className="p-4 sm:ml-64">
@@ -97,7 +107,10 @@ export default function Bookings() {
                   >
                     <div className={`${fontBold.className} flex flex-row`}>
                       <div className="flex-[1] text-lg">
-                        {booking.name} [{booking.number_plate}]
+                        {booking.name} [{booking.number_plate}]{" "}
+                        {isBookingActiveToday(booking) && (
+                          <span style={{ color: "green" }}>●</span>
+                        )}
                       </div>
                     </div>
                     <div className="text-sm">

@@ -103,6 +103,16 @@ export default function BookingDetails() {
     }
   }
 
+  const isBookingActiveToday = (booking) => {
+    const today = new Date();
+    const pickupDate = new Date(booking.pickup_date);
+    const dropoffDate = new Date(booking.dropoff_date);
+    if (today >= pickupDate && today <= dropoffDate) {
+      return true;
+    }
+    return false;
+  };
+
   return (
     <UserWrapper>
       <div className="p-4 sm:ml-64">
@@ -143,7 +153,10 @@ export default function BookingDetails() {
               </div>
               <br />
               <div className="text-lg">
-                <span className={fontBold.className}>Booking Info</span>
+                <span className={fontBold.className}>Booking Info </span>
+                {booking && isBookingActiveToday(booking) && (
+                  <span style={{ color: "green" }}>●</span>
+                )}
               </div>
               <div>
                 <span className={fontBold.className}>Pick Up:</span>{" "}

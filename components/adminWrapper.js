@@ -300,7 +300,7 @@ export default function AdminWrapper({ children }) {
             </li> */}
               <li>
                 <a
-                  href="#"
+                  href="/sys-admin/payments"
                   className="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100  group"
                 >
                   {/* <svg
@@ -483,7 +483,7 @@ export default function AdminWrapper({ children }) {
       </div>
     );
   } else if (user && user.isAdmin === 0) {
-    window.location.href = "/login";
+    window.location.href = "/sys-admin/login";
   } else {
     return <div>Loading...</div>;
   }
