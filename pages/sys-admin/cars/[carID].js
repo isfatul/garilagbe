@@ -178,13 +178,21 @@ export default function CarDetails() {
                   bookings.map((booking) => (
                     <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                       <td className="border px-4 py-2">
-                        {isBookingActiveToday(booking) && (
-                          <span style={{ color: "green" }}>●</span>
-                        )}{" "}
-                        {booking.res_ID}
+                        <a
+                          href={`/sys-admin/bookings/details/${booking.res_ID}`}
+                        >
+                          {isBookingActiveToday(booking) && (
+                            <span style={{ color: "green" }}>●</span>
+                          )}{" "}
+                          {booking.res_ID}
+                        </a>
                       </td>
                       <td className="border px-4 py-2">{booking.payment_ID}</td>
-                      <td className="border px-4 py-2">{booking.user_ID}</td>
+                      <td className="border px-4 py-2">
+                        <a href={`/sys-admin/users/${booking.user_ID}`}>
+                          {booking.user_ID}
+                        </a>
+                      </td>
                       <td className="border px-4 py-2">
                         {booking.pickup_date.substring(0, 10)}
                       </td>
@@ -211,7 +219,7 @@ export default function CarDetails() {
                             </span>
                           )}
                       </td>
-                      <td className="border px-4 py-2">{booking.amount}</td>
+                      <td className="border px-4 py-2">{booking.amount}BDT</td>
                       <td className="border px-4 py-2">
                         {booking.payment_date &&
                           booking.payment_date.substring(0, 10)}

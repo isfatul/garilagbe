@@ -54,8 +54,18 @@ export default function Payments() {
                   payments.map((payment) => (
                     <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                       <td className="border px-4 py-2">{payment.payment_ID}</td>
-                      <td className="border px-4 py-2">{payment.res_ID}</td>
-                      <td className="border px-4 py-2">{payment.user_ID}</td>
+                      <td className="border px-4 py-2">
+                        <a
+                          href={`/sys-admin/bookings/details/${payment.res_ID}`}
+                        >
+                          {payment.res_ID}
+                        </a>
+                      </td>
+                      <td className="border px-4 py-2">
+                        <a href={`/sys-admin/users/${payment.user_ID}`}>
+                          {payment.user_ID}
+                        </a>
+                      </td>
                       <td className="border px-4 py-2">
                         {payment.payment_method}{" "}
                         {payment.payment_method === "Credit Card" &&
@@ -76,7 +86,7 @@ export default function Payments() {
                             </span>
                           )}
                       </td>
-                      <td className="border px-4 py-2">{payment.amount}</td>
+                      <td className="border px-4 py-2">{payment.amount}BDT</td>
                       <td className="border px-4 py-2">
                         {payment.payment_date &&
                           payment.payment_date.substring(0, 10)}

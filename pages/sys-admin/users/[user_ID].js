@@ -101,9 +101,9 @@ export default function UserDetails() {
                 {user && user.phone}
               </div>
               <br />
-              <div className="text-lg">
+              {/* <div className="text-lg">
                 <span className={fontBold.className}>Rentals </span>
-              </div>
+              </div> */}
             </div>
             <div>
               <Image
