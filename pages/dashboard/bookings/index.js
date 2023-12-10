@@ -70,7 +70,7 @@ export default function Bookings() {
             <div
               className={`${fontBold.className} text-xl flex-[1] text-center`}
             >
-              My Bookings
+              Active Bookings
             </div>
           </div>
           <div
