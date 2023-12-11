@@ -132,7 +132,7 @@ export default function AdminDashboard() {
                 Total Amount Earned
               </div>
               <div className={`text-3xl ${fontBold.className}`}>
-                ৳{amountEarned && amountEarned}
+                ৳{amountEarned && (amountEarned / 1000).toFixed(2)}k
               </div>
             </div>
           </div>

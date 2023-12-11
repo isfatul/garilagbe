@@ -51,7 +51,7 @@ export default async function handler(req, res) {
           .status(500)
           .json({ message: "Failed to create reservation" });
       }
-      await res.status(200).json(results2);
+      await res.status(200).json({ ...results2, res_ID });
     }
   }
 }

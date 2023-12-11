@@ -234,7 +234,9 @@ export default function Checkout() {
                       .then((data) => {
                         console.log(data);
                         if (data.affectedRows === 1) {
-                          Router.push(`/dashboard/booking/${data.res_ID}`);
+                          Router.push(
+                            `/dashboard/booking-details/${data.res_ID}`
+                          );
                         }
                       });
                   }}
@@ -376,7 +378,9 @@ export default function Checkout() {
                       .then((data) => {
                         console.log(data);
                         if (data.affectedRows === 1) {
-                          Router.push(`/dashboard/booking/${data.booking_ID}`);
+                          Router.push(
+                            `/dashboard/booking-details/${data.res_ID}`
+                          );
                         }
                       });
                   }}
@@ -517,7 +521,6 @@ export default function Checkout() {
                         placeholder="TrxID"
                         name="trxID"
                         maxLength={10}
-                        pattern="[0-9\s]{13,19}"
                         required
                         className="w-full border-2 border-gray-400 rounded-md p-2 mt-2 "
                       />
